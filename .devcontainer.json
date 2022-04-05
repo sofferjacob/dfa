@@ -1,0 +1,7 @@
+{
+    "image": "racket/racket",
+    "extensions": [
+        "evzen-wybitul.magic-racket"
+    ],
+    //"postStartCommand": "raco pkg install racket-langserver"
+}
