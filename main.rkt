@@ -19,19 +19,20 @@
 
 (define accepted-states '(int))
 
-(define tokenize (input) (
+(define (tokenize input) (
     let loop
-        ([state start] [chars input] [res '()] [buffer ""] [curr-state "start"] [result ""])
+        ([state start] [chars input] [res '()] [buffer ""] [curr-state "start"])
         (if [empty? chars] (
-            if (member state accepted-states) result #t result #f
+            if (member state accepted-states) (reverse res) (reverse res)
         ) 
             (let-values (
                 [(next trans strstate) (state (car chars))]
             ) 
-                (if trans (
-                    (loop next (cdr chars) )
-                ))
-            )
+                (if trans 
+                    (loop next (cdr chars) (cons (string-append curr-state " " buffer [string(car chars)]) res) "" strstate)
+                
+                    (loop next (cdr chars) res (string-append buffer (string (car chars))) strstate) 
+                )
             )
         )
 ) )
