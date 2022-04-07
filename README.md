@@ -23,17 +23,17 @@ Los estados de aeptación son los siguientes:
 * c_par
 
 ## Tabla de Transiciones
-| **Estado/Input** | **+\|-** | **dig** | **+\|-\|*\|/** | **.** | **e\|E** | **alpha** | **=**  | **(** | **)** | **_** |
-|------------------|----------|---------|----------------|-------|----------|-----------|--------|-------|-------|-------|
-| **start**        | n_sign   | int     | F              | F     | F        | var       | F      | c_par | F     | F     |
-| **n_sign**       | F        | int     | F              | F     | F        | F         | F      | F     | F     | F     |
-| **int**          | N/A      | int     | op             | real  | F        | F         | F      | o_par | c_par | F     |
-| **op**           | n_sign   | int     | F              | F     | F        | F         | F      | o_par | F     | F     |
-| **var**          | F        | var     | F              | F     | N/A      | var       | assign | F     | F     | var   |
-| **assign**       | n_sign   | int     | F              | F     | N/A      | var       | F      | o_par | F     | F     |
-| **o_par**        | n_sign   | int     | F              | F     | F        | var       | F      | F     | F     | F     |
-| **c_par**        | N/A      | int     | op             | F     | F        | var       | F      | o_par | c_par | F     |
-| **real**         | N/A      | real    | op             | F     | realexp  | F         | F      | F     | c_par | F     |
-| **realexp**      | exp_sign | exp_dig | F              | F     | F        | F         | F      | F     | F     | F     |
-| **exp_sign**     | F        | exp_dig | F              | F     | F        | F         | F      | F     | F     | F     |
-| **exp_dig**      | N/A      | F       | op             | F     | F        | F         | F      | o_par | c_par | F     |
+| **Estado/Input** | **+\|-** | **dig** | **+\|-\|*\|/** | **.** | **e\|E** | **alpha** | **=**  | **(** | **)** | **_** | **" "** |
+|------------------|----------|---------|----------------|-------|----------|-----------|--------|-------|-------|-------|---------|
+| **start**        | n_sign   | int     | F              | F     | F        | var       | F      | o_par | F     | F     | start   |
+| **n_sign**       | F        | int     | F              | F     | F        | F         | F      | o_par | F     | F     | n_sign  |
+| **int**          | N/A      | int     | op             | real  | F        | F         | F      | o_par | c_par | F     | F       |
+| **op**           | n_sign   | int     | F              | F     | F        | F         | F      | o_par | F     | F     | op      |
+| **var**          | F        | var     | op             | F     | N/A      | var       | assign | o_par | c_par | var   | var     |
+| **assign**       | n_sign   | int     | F              | F     | N/A      | var       | F      | o_par | F     | F     | assign  |
+| **o_par**        | n_sign   | int     | F              | F     | F        | var       | F      | F     | F     | F     | o_par   |
+| **c_par**        | N/A      | int     | op             | F     | F        | var       | F      | o_par | c_par | F     | c_par   |
+| **real**         | N/A      | real    | op             | F     | realexp  | F         | F      | F     | c_par | F     | F       |
+| **realexp**      | exp_sign | exp_dig | F              | F     | F        | F         | F      | F     | F     | F     | F       |
+| **exp_sign**     | F        | exp_dig | F              | F     | F        | F         | F      | F     | F     | F     | F       |
+| **exp_dig**      | N/A      | F       | op             | F     | F        | F         | F      | o_par | c_par | F     | F       |
