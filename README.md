@@ -21,6 +21,7 @@ Los estados de aeptación son los siguientes:
 * real
 * exp_dig
 * c_par
+* var
 
 ## Tabla de Transiciones
 | **Estado/Input** | **+\|-** | **dig** | **+\|-\|*\|/** | **.** | **e\|E** | **alpha** | **=**  | **(** | **)** | **_** | **" "** |
