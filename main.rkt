@@ -1,14 +1,18 @@
+; Actividad 3.2: Programando un DFA
+; Jacobo Soffer Levy | A01028653
+; 19/04/22
 #lang racket
 
-(require racket/trace)
-
+; Helper functions used to detect certain
+; types of characters 
 (define (sign? c) (member c '(#\+ #\-)))
 (define (operator? c) (member c '(#\+ #\- #\* #\/)))
 
-(define (err) ('err))
-
+; States are defined as functions,
+; which in turn take a character and
+; evaluate to the next state
 (define (start  c) 
-    "Estado inicial"
+    "Initial state"
 (
     cond
         [(sign? c) [values n_sign #f "signo" "start"]]
@@ -20,7 +24,7 @@
 ))
 
 (define (n_sign c)
-    "Estado de signo de número"
+    "Number sign state"
     (
     cond
         [(char-numeric? c) [values int #t "entero" "signo"]]
@@ -31,7 +35,7 @@
 )
 
 (define (o_par c)
-    "Estado de parentesis abierto"
+    "Open parentheses state"
     (
     cond
         [(sign? c) [values n_sign #t "signo" "parentesis abierto"]]
@@ -43,7 +47,7 @@
 )
 
 (define (int c)
-    "Estado número entero"
+    "integer state"
     (
     cond
         [(operator? c) [values op #t "operator" "entero"]]
@@ -57,7 +61,7 @@
 )
 
 (define (op c)
-    "Estado operador"
+    "Operator state"
     (
     cond
         [(sign? c) [values n_sign #t "signo" "operador"]]
@@ -69,7 +73,7 @@
 )
 
 (define (var c)
-    "Estado variable"
+    "Variable state"
     (
     cond
         [(operator? c) [values op #t "operador" "variable"]]
@@ -85,7 +89,7 @@
 )
 
 (define (assign c)
-    "Estado de asignación"
+    "Assignment state"
     (
     cond
         [(sign? c) [values n_sign #t "signo" "asignacion"]]
@@ -98,7 +102,7 @@
 )
 
 (define (c_par c)
-    "Estado parentesis cerrado"
+    "Closed parenthesis state"
     (
     cond
         [(operator? c) [values op #t "operador" "parentesis cerrado"]]
@@ -112,7 +116,7 @@
 )
 
 (define (real c)
-    "Estado número real"
+    "Real number state"
     (
     cond
         [(operator? c) [values op #t "operador" "real"]]
@@ -125,7 +129,7 @@
 )
 
 (define (realexp c)
-    "Estado número real, con extensión de exponente"
+    "Real number with exponent state"
     (
     cond
         [(sign? c) [values exp_sign #f "real" "real"]]
@@ -135,7 +139,7 @@
 )
 
 (define (exp_sign c)
-    "Estado número real, con extensión de exponente con signo"
+    "Real number with exponent and sign"
     (
     cond
         [(char-numeric? c) [values exp_dig #f "real" "real"]]
@@ -144,7 +148,7 @@
 )
 
 (define (exp_dig c)
-    "Estado número real, con extensión de exponente y digito"
+    "Real number with an exponent and digit"
     (
     cond
         [(operator? c) [values op #t "operador" "real"]]
@@ -154,38 +158,15 @@
 )   
 )
 
-(define accepted-states (list int real exp_dig  c_par))
+; List of accepted final states
+(define accepted-states (list int real exp_dig  c_par var))
 
-(define (dfa input) (tokenize (string->list input)))
-
-; (define (tokenize input) (
-;     let loop
-;         ([state start] [chars input] [tokens null] [types null] [buffer ""] [curr-state "start"])
-;         (if [empty? chars] (
-;                 let res
-;                     ([c (reverse (cons buffer tokens))] [t (reverse (cons curr-state types))] [r "tipo | token"])
-;                     (
-;                        if (empty? t) (string-append r "\n") (res (cdr c) (cdr t) (string-append r "\n" (car t) " " (car c)))
-;                     )
-;             ) 
-;             (let-values (
-;                 [(next trans strstate cstr) (state (car chars))]
-;             )
-;                (loop
-;                     next
-;                     (cdr chars)
-;                     (if trans [cons (string-append buffer) tokens] tokens)
-;                     (if trans [cons cstr types] types)
-;                     (if trans (string [car chars]) [string-append buffer (string [car chars])])
-;                     strstate
-;                )
-;             )
-;         )
-; ) )
-
-(define (tokenize input) (
+(define (dfa input) 
+    "Used to execute the automation, takes a string with arithmetic expressions as an argument.
+    returns a list with type/token pairs and a boolean to indicate whether the input is valid"
+(
     let loop
-        ([state start] [chars input] [tokens null] [types null] [buffer ""] [curr-state "start"])
+        ([state start] [chars (string->list input)] [tokens null] [types null] [buffer ""] [curr-state "start"])
         (if [empty? chars] (values
                 [map (lambda (a b) (cons a b)) (reverse (cons curr-state types)) (reverse (cons buffer tokens))]
                 [if (member state accepted-states) #t #f]
